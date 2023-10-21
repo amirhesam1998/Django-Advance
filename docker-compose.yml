@@ -1,10 +1,10 @@
 version: '3.9'
 services:
-  backend:
-    build: .
-    container_name: backend
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
+  backend:           #name services
+    build: .         #build setup 
+    container_name: backend 
+    command: python manage.py runserver 0.0.0.0:8000         #run command
+    volumes:            #Put the changes of folder 'core' in the 'app' file ((link them))
       - ./core:/app
     ports:
       - "8000:8000"
