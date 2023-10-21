@@ -1,4 +1,5 @@
 version: '3.9'
+
 services:
   backend:           #name services
     build: .         #build setup 
@@ -8,5 +9,6 @@ services:
       - ./core:/app
     ports:
       - "8000:8000"
-    # environment:
-    #   - name=value
+    environment:
+      - SECRET_KEY=test
+      - DEBUG=True
