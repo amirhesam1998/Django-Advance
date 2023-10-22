@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser , PermissionsMixin , BaseUserManager
-from django.utils.translation import ugettext_lazy as _  #Using ugettext_lazy means that you don't translate texts to a specific language (for example, English to French or Farsi). Instead, you say "these texts are translatable" and Django uses its own language translation process at runtime. This feature allows you to easily translate your apps for different languages and present them to people who use different languages.
+from django.utils.translation import gettext_lazy as _            #"Using ugettext_lazy means that you don't translate texts to a specific language (for example, English to French or Farsi). Instead, you say "these texts are translatable" and Django uses its own language translation process at runtime. This feature allows you to easily translate your apps for different languages and present them to people who use different languages."
 # Create your models here.
 
 class UserManager(BaseUserManager):

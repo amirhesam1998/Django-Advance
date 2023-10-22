@@ -8,7 +8,7 @@ class Post(models.Model):
     title = models.CharField(max_length=250)
     content = models.TextField()
     status = models.BooleanField()
-    category = models.ForeignKey(Category , on_delete=models.SET_NULL , null= True)  #This means that if a record is deleted in the Category model, every post associated with this category will receive a null value and will not be associated with the deleted category. This approach is useful when you need records in the related model to remain valid even if the related record in the original model is deleted.
+    category = models.ForeignKey('Category' , on_delete=models.SET_NULL , null= True)  #This means that if a record is deleted in the Category model, every post associated with this category will receive a null value and will not be associated with the deleted category. This approach is useful when you need records in the related model to remain valid even if the related record in the original model is deleted.
     created_date = models.DateTimeField(auto_now_add=True)    #The value of this field is set to the current exact date and time of the database (server time) and the user cannot fill this field manually.
     updated_date = models.DateTimeField(auto_now=True)  #The value of this field is set to the current exact date and time of the database (server time). This is done automatically and the user does not need to manually intervene in this field.
     published_date = models.DateTimeField()
