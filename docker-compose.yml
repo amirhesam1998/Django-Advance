@@ -20,7 +20,7 @@ services:
 # COMMAND:
 # docker-compose up --build                                                             up Docker-Compose along with 'build' file (line 5)
 # docker-compose logs -f                                                                show logs
-# docker-compose exec backend sh -c 'pip install python-decouple'                       install python-decouple package in container_name services (backend)
+# docker-compose exec backend sh -c "pip install python-decouple"                       install python-decouple package in container_name services (backend)
                                                                                         # notics: first you are build again docker-compose because python-decouple package
                                                                                         #         not building in docker (explain in next line)
 # docker compose up --build -d                                                                                        
