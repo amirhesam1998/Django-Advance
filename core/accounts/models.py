@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser , PermissionsMixin , BaseUserManager
 from django.utils.translation import gettext_lazy as _            #"Using ugettext_lazy means that you don't translate texts to a specific language (for example, English to French or Farsi). Instead, you say "these texts are translatable" and Django uses its own language translation process at runtime. This feature allows you to easily translate your apps for different languages and present them to people who use different languages."
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 # Create your models here.
 
 class UserManager(BaseUserManager):
@@ -72,3 +74,8 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.email
+
+@receiver(post_save , sender = User)    #SIGNALS : When the 'user' model is made, add it to 'Profile' model as well
+def save_profile(sender , instance , created , **kwargs):
+    if created:  #If it is made, make it, if it is not made, edit it and don't make anything
+        Profile.objects.create(user = instance)
