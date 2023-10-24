@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import  Indexview , RedirectToMaktab , PostlistView , PostDetailView
+from .views import  Indexview , RedirectToMaktab , PostlistView , PostDetailView , PostCreateView
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 
@@ -14,4 +14,5 @@ urlpatterns = [
     path("go-to-maktab/<int:pk>" , RedirectToMaktab.as_view() , name="redirect-to-maktabkhone" ),
     path("post/" , PostlistView.as_view() , name="post-list" ),   # (/) important
     path("post/<int:pk>/" , PostDetailView.as_view() , name="post-detail" ),
+    path("post/create/" , PostCreateView.as_view() , name="post-create" ),
 ]
