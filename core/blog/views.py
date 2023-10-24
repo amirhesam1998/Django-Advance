@@ -1,7 +1,7 @@
 from typing import Any
 from django.shortcuts import render
 from django.views.generic.base import TemplateView , RedirectView
-from  django.views.generic import ListView , DetailView , FormView
+from  django.views.generic import ListView , DetailView , FormView , CreateView
 from .forms import PostForm
 from .models import Post
 from django.shortcuts import get_object_or_404
@@ -67,7 +67,7 @@ class PostlistView(ListView):
 class PostDetailView(DetailView):
     model = Post
 
-
+'''
 class PostCreateView(FormView):
     template_name = "contact.html"
     form_class = PostForm
@@ -78,3 +78,9 @@ class PostCreateView(FormView):
         # It should return an HttpResponse.
         form.save()
         return super().form_valid(form)
+'''
+class PostCreateView(CreateView):                                #CreateView save data in database by default, but FormView process data and dont save by default in databases, just use form_valid method can it.
+    model = Post
+    #fields = ['author','title','content','status','category','published_date']
+    form_class = PostForm
+    success_url = "/blog/post/"
