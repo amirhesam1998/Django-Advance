@@ -3,7 +3,7 @@ from django.forms.models import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic.base import TemplateView , RedirectView
-from  django.views.generic import ListView , DetailView , FormView , CreateView
+from  django.views.generic import ListView , DetailView , FormView , CreateView , UpdateView
 from .forms import PostForm
 from .models import Post
 from django.shortcuts import get_object_or_404
@@ -90,3 +90,8 @@ class PostCreateView(CreateView):                                #CreateView sav
     def form_valid(self, form):                   #This function creates the form using the logged in user without entering the author's logged in email in the form and we clear the author field in the forms.py.
         form.instance.author = self.request.user        #In the 'form', set the 'author' part of the created 'instance' equal to the user who entered ((email)) of the user (creator or author field = user information login )
         return super().form_valid(form)
+
+class PostEditView(UpdateView):
+    model = Post
+    form_class = PostForm
+    success_url = '/blog/post/'
