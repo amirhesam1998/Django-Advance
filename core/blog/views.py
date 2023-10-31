@@ -7,6 +7,7 @@ from  django.views.generic import ListView , DetailView , FormView , CreateView 
 from .forms import PostForm
 from .models import Post
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 
 #function based view to show template (example)
@@ -54,7 +55,7 @@ class RedirectToMaktab(RedirectView):
         print(post)
         return super().get_redirect_url(*args, **kwargs)
     
-class PostlistView(ListView):
+class PostlistView(LoginRequiredMixin,ListView):
     model = Post                         #once solution         
     #queryset = Post.objects.all()         #two solution and get_queryset method tree solution
     context_object_name = "posts"                 #edit default context object name (object_list to any want you (example : posts) in html code)    
@@ -66,7 +67,7 @@ class PostlistView(ListView):
     #    return posts
 
 
-class PostDetailView(DetailView):
+class PostDetailView(LoginRequiredMixin,DetailView):
     model = Post
 
 '''
@@ -81,7 +82,7 @@ class PostCreateView(FormView):
         form.save()
         return super().form_valid(form)
 '''
-class PostCreateView(CreateView):                                #CreateView save data in database by default, but FormView process data and dont save by default in databases, just use form_valid method can it.
+class PostCreateView(LoginRequiredMixin,CreateView):                                #CreateView save data in database by default, but FormView process data and dont save by default in databases, just use form_valid method can it.
     model = Post
     #fields = ['author','title','content','status','category','published_date']
     form_class = PostForm
@@ -91,11 +92,11 @@ class PostCreateView(CreateView):                                #CreateView sav
         form.instance.author = self.request.user        #In the 'form', set the 'author' part of the created 'instance' equal to the user who entered ((email)) of the user (creator or author field = user information login )
         return super().form_valid(form)
 
-class PostEditView(UpdateView):
+class PostEditView(LoginRequiredMixin,UpdateView):
     model = Post
     form_class = PostForm
     success_url = '/blog/post/'
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(LoginRequiredMixin,DeleteView):
     model = Post
     success_url = "/blog/post/"
