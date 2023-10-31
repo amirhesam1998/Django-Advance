@@ -1,13 +1,12 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-
 #getting user model objects in everywhere by AUTH_USER_MODEL in settings.py
-User = get_user_model()
+#User = get_user_model()
 
 # Create your models here.
 class Post(models.Model):
-    author = models.ForeignKey(User , on_delete=models.CASCADE)   #When a user (or the related record in the User model) is deleted, all the posts that are related to this user (posts that have this user as the author) are also deleted.
+    author = models.ForeignKey('accounts.Profile' , on_delete=models.CASCADE)   #When a user (or the related record in the User model) is deleted, all the posts that are related to this user (posts that have this user as the author) are also deleted.
     image = models.ImageField(null=True , blank=True)   #That is, it is not mandatory. null for databases , blank for input in tamplates
     title = models.CharField(max_length=250)
     content = models.TextField()

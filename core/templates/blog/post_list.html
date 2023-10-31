@@ -10,7 +10,7 @@
         <a href="{% url "blog:post-detail" pk=post.id%}"><h2>{{post.id}} - {{ post.title }} </h2></a>
         <a href="{% url "blog:post-edit" pk=post.id%}"><h5>EDIT</h5></a>
         <a href="{% url "blog:post-delete" pk=post.id%}"><h5>DELETE</h5></a>
-        <p> {{ post.content }} - {{post.author}} </p>
+        <p> {{ post.content }} - {{ post.author.first_name }} - {{ post.author.last_name }} </p>
     </div>
     {% endfor %}
     <div class="pagination">
