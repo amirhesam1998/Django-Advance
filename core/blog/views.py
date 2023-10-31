@@ -7,7 +7,7 @@ from  django.views.generic import ListView , DetailView , FormView , CreateView 
 from .forms import PostForm
 from .models import Post
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 # Create your views here.
 
 #function based view to show template (example)
@@ -55,7 +55,8 @@ class RedirectToMaktab(RedirectView):
         print(post)
         return super().get_redirect_url(*args, **kwargs)
     
-class PostlistView(LoginRequiredMixin,ListView):
+class PostlistView(PermissionRequiredMixin,LoginRequiredMixin,ListView):
+    permission_required = 'blog.view_post'
     model = Post                         #once solution         
     #queryset = Post.objects.all()         #two solution and get_queryset method tree solution
     context_object_name = "posts"                 #edit default context object name (object_list to any want you (example : posts) in html code)    
