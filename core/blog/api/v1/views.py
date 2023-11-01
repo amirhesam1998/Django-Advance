@@ -7,7 +7,10 @@ from django.shortcuts import get_object_or_404
 
 @api_view()
 def postList(request):
-    return Response("ok")
+    posts = Post.objects.filter(status = True)
+    serializer = PostSerializer(posts , many = True)
+    data = serializer.data
+    return Response(data)
 
 
 @api_view()
@@ -25,7 +28,7 @@ def postDetail(request,id):
     '''
     solution 2:
     '''
-    post = get_object_or_404(Post , pk=id)
+    post = get_object_or_404(Post , pk=id , status = True)
     serializer = PostSerializer(post) 
     data = serializer.data
     return Response(data)
