@@ -9,8 +9,7 @@ from .forms import PostForm
 from .models import Post
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+
 # Create your views here.
 
 #function based view to show template (example)
@@ -104,11 +103,4 @@ class PostEditView(LoginRequiredMixin,UpdateView):
 class PostDeleteView(LoginRequiredMixin,DeleteView):
     model = Post
     success_url = "/blog/post/"
-
-@api_view()
-def api_post_list_view(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
-    return Response("ok")
 
