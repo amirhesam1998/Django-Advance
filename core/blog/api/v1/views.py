@@ -5,12 +5,19 @@ from ...models import Post
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 
-@api_view()
+@api_view(["GET","POST"])
 def postList(request):
-    posts = Post.objects.filter(status = True)
-    serializer = PostSerializer(posts , many = True)
-    data = serializer.data
-    return Response(data)
+    if request.method == "GET":
+        posts = Post.objects.filter(status = True)
+        serializer = PostSerializer(posts , many = True)
+        data = serializer.data
+        return Response(data)
+    elif request.method == "POST":
+        serializer = PostSerializer(data=request.data)               #request.data means,show data information send from client to server
+        serializer.is_valid(raise_exception=True)                      #validations
+        serializer.save()                                              #save serializer
+        return Response(serializer.data)   
+                                
 
 
 @api_view()
