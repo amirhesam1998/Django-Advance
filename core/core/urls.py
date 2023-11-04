@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),   #for LoginRequiredMixin
     path('blog/', include("blog.url")),
+    path('api-auth/', include('rest_framework.urls')),           #for login and logout icon in rest_framework
 ]
 
 
