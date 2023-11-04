@@ -20,7 +20,7 @@ def postList(request):
                                 
 
 
-@api_view()
+@api_view(["GET" , "PUT" , "DELETE"])
 def postDetail(request,id):
     '''
     solution 1:
@@ -36,7 +36,16 @@ def postDetail(request,id):
     solution 2:
     '''
     post = get_object_or_404(Post , pk=id , status = True)
-    serializer = PostSerializer(post) 
-    data = serializer.data
-    return Response(data)
+    if request.method == "GET":
+        serializer = PostSerializer(post) 
+        data = serializer.data
+        return Response(data)
+    elif request.method == "PUT":
+        serializer = PostSerializer(post , data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+    elif request.method == "DELETE":
+        post.delete()
+        return Response({"detail" : "item delete successfully"} , status=status.HTTP_204_NO_CONTENT)
 
