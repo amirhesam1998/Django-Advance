@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView , ListCreateAPIView , RetrieveAPIView , RetrieveUpdateAPIView , RetrieveDestroyAPIView
 from rest_framework import mixins
 from rest_framework import viewsets
+from rest_framework.decorators import action
 #Example FBV :
 """@api_view(["GET","POST"])
 @permission_classes([IsAuthenticated])
@@ -176,6 +177,11 @@ class PostModelViewSets(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status = True)
+
+    @action(methods=["get"],detail=False)                         #detail = False , means no input required. if equal by True means input required
+    def get_ok(self, request):
+        return Response({"detail":"ok"})
+
 
 class CategoryModelViewSets(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]    
