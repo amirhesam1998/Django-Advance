@@ -1,8 +1,8 @@
 from rest_framework.decorators import api_view ,  permission_classes
 from rest_framework.permissions import IsAuthenticated , IsAdminUser , IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from .serializers import PostSerializer
-from ...models import Post
+from .serializers import PostSerializer , CategorySerializer
+from ...models import Post , Category
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
@@ -142,7 +142,7 @@ class PostDetail(RetrieveAPIView,RetrieveUpdateAPIView,RetrieveDestroyAPIView):
 
 
 #EXAMPLE FOR VIEWSETS IN CBV 
-class PostViewSets(viewsets.ViewSet):
+'''class PostViewSets(viewsets.ViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status = True)
@@ -170,4 +170,14 @@ class PostViewSets(viewsets.ViewSet):
         post.delete()
         return Response({"detail" : "item delete successfully"} , status=status.HTTP_204_NO_CONTENT)
     def partial_update(self, request, pk=None):
-        pass
+        pass'''
+
+class PostModelViewSets(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = PostSerializer
+    queryset = Post.objects.filter(status = True)
+
+class CategoryModelViewSets(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]    
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
