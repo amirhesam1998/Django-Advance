@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView , ListCreateAPIView , RetrieveAPIView , RetrieveUpdateAPIView , RetrieveDestroyAPIView
 from rest_framework import mixins
+from rest_framework import viewsets
 #Example FBV :
 """@api_view(["GET","POST"])
 @permission_classes([IsAuthenticated])
@@ -62,12 +63,12 @@ def postDetail(request,id):
     def get(self,request):
         """retrieving a list of post"""
         posts = Post.objects.filter(status = True)
-        serializer = PostSerializer(posts , many = True)
+        serializer = self.serializer_class(posts , many = True)
         data = serializer.data
         return Response(data)
     def post(self,request):
         """creating post with provided data"""
-        serializer = PostSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)  
         serializer.save()
         return Response(serializer.data)'''   
@@ -100,13 +101,13 @@ class PostList(ListCreateAPIView):
     def get(self,request,id):
         """retrieving a detail of post"""
         post = get_object_or_404(Post , pk=id , status = True)
-        serializer = PostSerializer(post) 
+        serializer = self.serializer_class(post) 
         data = serializer.data
         return Response(data)
     def put(self,request,id):
         """editing the post data"""
         post = get_object_or_404(Post , pk=id , status = True)
-        serializer = PostSerializer(post , data=request.data)
+        serializer = self.serializer_class(post , data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)      
@@ -138,3 +139,35 @@ class PostDetail(RetrieveAPIView,RetrieveUpdateAPIView,RetrieveDestroyAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status = True)
+
+
+#EXAMPLE FOR VIEWSETS IN CBV 
+class PostViewSets(viewsets.ViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = PostSerializer
+    queryset = Post.objects.filter(status = True)
+    
+    def list(self,request):
+        serializer = self.serializer_class(self.queryset, many = True)
+        return Response(serializer.data)
+    def retrieve(self, request, pk=None):
+        post = get_object_or_404(self.queryset, pk=pk)
+        serializer = self.serializer_class(post)
+        return Response(serializer.data)
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data) 
+        serializer.is_valid(raise_exception=True)  
+        serializer.save()
+        return Response(serializer.data)  
+    def update(self, request, pk=None):    
+        post = get_object_or_404(self.queryset , pk=pk , status = True)
+        serializer = self.serializer_class(post , data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data) 
+    def destroy(self, request, pk=None):
+        post = get_object_or_404(self.queryset , pk=pk , status = True)
+        post.delete()
+        return Response({"detail" : "item delete successfully"} , status=status.HTTP_204_NO_CONTENT)
+    def partial_update(self, request, pk=None):
+        pass
