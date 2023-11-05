@@ -6,7 +6,8 @@ from ...models import Post
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
-
+from rest_framework.generics import GenericAPIView , ListCreateAPIView , RetrieveAPIView , RetrieveUpdateAPIView , RetrieveDestroyAPIView
+from rest_framework import mixins
 #Example FBV :
 """@api_view(["GET","POST"])
 @permission_classes([IsAuthenticated])
@@ -54,7 +55,7 @@ def postDetail(request,id):
 
 
 #EXAMPLE CBV:
-class PostList(APIView):
+'''class PostList(APIView):
     """getting a list of post and creating a new post"""
     permission_classes = [IsAuthenticated]
     serializer_class = PostSerializer
@@ -69,10 +70,30 @@ class PostList(APIView):
         serializer = PostSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)  
         serializer.save()
-        return Response(serializer.data)   
+        return Response(serializer.data)'''   
+
+'''class PostList(GenericAPIView,mixins.ListModelMixin, mixins.CreateModelMixin):
+    """getting a list of post and creating a new post"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = PostSerializer
+    queryset = Post.objects.filter(status = True)
+
+    def get(self, request, *args, **kwargs):
+        """retrieving a list of post"""
+        return self.list(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        """creating post with provided data"""
+        return self.create(request, *args, **kwargs)'''
+
+class PostList(ListCreateAPIView):
+    """getting a list of post and creating a new post"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = PostSerializer
+    queryset = Post.objects.filter(status = True)
 
 
-class PostDetail(APIView):
+'''class PostDetail(APIView):
     """getting detail of the post and edit plus delete the posts"""
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
@@ -93,5 +114,27 @@ class PostDetail(APIView):
         """deleting the post """
         post = get_object_or_404(Post , pk=id , status = True)
         post.delete()
-        return Response({"detail" : "item delete successfully"} , status=status.HTTP_204_NO_CONTENT)                  
+        return Response({"detail" : "item delete successfully"} , status=status.HTTP_204_NO_CONTENT)    '''
 
+'''class PostDetail(GenericAPIView,mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.DestroyModelMixin):
+    """getting detail of the post and edit plus delete the posts"""
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = PostSerializer
+    queryset = Post.objects.filter(status = True)
+
+    def get(self, request, *args, **kwargs):
+        """retrieving a list of post"""
+        return self.retrieve(request, *args, **kwargs)
+    def put(self, request, *args, **kwargs):
+        """editing the post data"""
+        return self.update(request, *args, **kwargs)
+    def delete(self, request, *args, **kwargs):
+        """deleting the post """
+        return self.destroy(request, *args, **kwargs)
+'''
+
+class PostDetail(RetrieveAPIView,RetrieveUpdateAPIView,RetrieveDestroyAPIView):
+    """getting detail of the post and edit plus delete the posts"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = PostSerializer
+    queryset = Post.objects.filter(status = True)
