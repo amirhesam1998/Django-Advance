@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from ...models import Post , Category
-
+from accounts.models import Profile
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -23,6 +23,7 @@ class PostSerializer(serializers.ModelSerializer):                           #Mo
         model = Post
         fields = ["id","author",'image',"title","content","snippet","status","category","relative_url","absolute_url","created_date","updated_date","published_date"]
         #read_only_fields = ["content"]
+        read_only_fields = ["author"]
 
     def get_abs_url(self,obj):
         request = self.context.get("request")
@@ -40,6 +41,11 @@ class PostSerializer(serializers.ModelSerializer):                           #Mo
             rep.pop('relative_url',None)
         else:                                         #when im get a list of post
             rep.pop('content',None)
-        rep['category'] = CategorySerializer(instance.category).data                  #in the category field , set to the instance category value and serialize it and convert it to json , for manytomany or foreignkey value
+        rep['category'] = CategorySerializer(instance.category , context={"request" : request}).data                  #in the category field , set to the instance category value and serialize it and convert it to json , for manytomany or foreignkey value
         return rep
+    
+    def create(self, validated_data):
+            validated_data['author'] = Profile.objects.get(user__id = self.context.get('request').user.id)
+            return super().create(validated_data)
+
 
