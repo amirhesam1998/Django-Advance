@@ -10,6 +10,7 @@ from rest_framework.generics import GenericAPIView , ListCreateAPIView , Retriev
 from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from .permissions import IsOwnerOrReadOnly
 #Example FBV :
 """@api_view(["GET","POST"])
 @permission_classes([IsAuthenticated])
@@ -174,7 +175,7 @@ class PostDetail(RetrieveAPIView,RetrieveUpdateAPIView,RetrieveDestroyAPIView):
         pass'''
 
 class PostModelViewSets(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status = True)
 
