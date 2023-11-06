@@ -29,8 +29,17 @@ class PostSerializer(serializers.ModelSerializer):                           #Mo
         return request.build_absolute_uri(obj.pk)
     
     def to_representation(self, instance):                  #you should use this function whenever you want to change a value in the display only((it is not meant to  display the input values))
+        request = self.context.get('request')               #get request objects
         rep = super().to_representation(instance)
-        rep['category'] = CategorySerializer(instance.category).data                  #in the category field , set to the instance category value and serialize it and convert it to json
-        rep.pop('snippet',None)           #delete snippet field for show , None means if this object does not found dont show errors
+        #print(request.__dict__)                             #show request detail
+        rep['state'] = "list"                                 #when im get a list of post, default value
+        if request.parser_context.get('kwargs').get('pk'):      #when im get a single of post ((for example '.../post/1')), if its does exist:
+            rep['state'] = "single"                           #show single
+            rep.pop('snippet',None)           #delete snippet field for show , None means if this object does not found dont show errors
+            rep.pop('absolute_url',None)
+            rep.pop('relative_url',None)
+        else:                                         #when im get a list of post
+            rep.pop('content',None)
+        rep['category'] = CategorySerializer(instance.category).data                  #in the category field , set to the instance category value and serialize it and convert it to json , for manytomany or foreignkey value
         return rep
 
