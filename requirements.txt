@@ -8,3 +8,7 @@ djangorestframework
 drf-yasg[validation]
 markdown
 django-filter
+
+
+#refactoring and tests
+black

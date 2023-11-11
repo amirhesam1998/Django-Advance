@@ -1,20 +1,31 @@
-from rest_framework.decorators import api_view ,  permission_classes
-from rest_framework.permissions import IsAuthenticated , IsAdminUser , IsAuthenticatedOrReadOnly
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import (
+    IsAuthenticated,
+    IsAdminUser,
+    IsAuthenticatedOrReadOnly,
+)
 from rest_framework.response import Response
-from .serializers import PostSerializer , CategorySerializer
-from ...models import Post , Category
+from .serializers import PostSerializer, CategorySerializer
+from ...models import Post, Category
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
-from rest_framework.generics import GenericAPIView , ListCreateAPIView , RetrieveAPIView , RetrieveUpdateAPIView , RetrieveDestroyAPIView
+from rest_framework.generics import (
+    GenericAPIView,
+    ListCreateAPIView,
+    RetrieveAPIView,
+    RetrieveUpdateAPIView,
+    RetrieveDestroyAPIView,
+)
 from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from .permissions import IsOwnerOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter , OrderingFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from .paginations import DefaultPagination
-#Example FBV :
+
+# Example FBV :
 """@api_view(["GET","POST"])
 @permission_classes([IsAuthenticated])
 def postList(request):
@@ -27,7 +38,7 @@ def postList(request):
         serializer = PostSerializer(data=request.data)               #request.data means,show data information send from client to server
         serializer.is_valid(raise_exception=True)                      #validations
         serializer.save()                                              #save serializer
-        return Response(serializer.data)"""   
+        return Response(serializer.data)"""
 
 """@api_view(["GET" , "PUT" , "DELETE"])
 @permission_classes([IsAuthenticatedOrReadOnly])
@@ -60,7 +71,7 @@ def postDetail(request,id):
         return Response({"detail" : "item delete successfully"} , status=status.HTTP_204_NO_CONTENT)"""
 
 
-#EXAMPLE CBV:
+# EXAMPLE CBV:
 '''class PostList(APIView):
     """getting a list of post and creating a new post"""
     permission_classes = [IsAuthenticated]
@@ -76,7 +87,7 @@ def postDetail(request,id):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)  
         serializer.save()
-        return Response(serializer.data)'''   
+        return Response(serializer.data)'''
 
 '''class PostList(GenericAPIView,mixins.ListModelMixin, mixins.CreateModelMixin):
     """getting a list of post and creating a new post"""
@@ -92,11 +103,13 @@ def postDetail(request,id):
         """creating post with provided data"""
         return self.create(request, *args, **kwargs)'''
 
+
 class PostList(ListCreateAPIView):
     """getting a list of post and creating a new post"""
+
     permission_classes = [IsAuthenticated]
     serializer_class = PostSerializer
-    queryset = Post.objects.filter(status = True)
+    queryset = Post.objects.filter(status=True)
 
 
 '''class PostDetail(APIView):
@@ -139,15 +152,17 @@ class PostList(ListCreateAPIView):
         return self.destroy(request, *args, **kwargs)
 '''
 
-class PostDetail(RetrieveAPIView,RetrieveUpdateAPIView,RetrieveDestroyAPIView):
+
+class PostDetail(RetrieveAPIView, RetrieveUpdateAPIView, RetrieveDestroyAPIView):
     """getting detail of the post and edit plus delete the posts"""
+
     permission_classes = [IsAuthenticated]
     serializer_class = PostSerializer
-    queryset = Post.objects.filter(status = True)
+    queryset = Post.objects.filter(status=True)
 
 
-#EXAMPLE FOR VIEWSETS IN CBV 
-'''class PostViewSets(viewsets.ViewSet):
+# EXAMPLE FOR VIEWSETS IN CBV
+"""class PostViewSets(viewsets.ViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status = True)
@@ -175,25 +190,31 @@ class PostDetail(RetrieveAPIView,RetrieveUpdateAPIView,RetrieveDestroyAPIView):
         post.delete()
         return Response({"detail" : "item delete successfully"} , status=status.HTTP_204_NO_CONTENT)
     def partial_update(self, request, pk=None):
-        pass'''
+        pass"""
+
 
 class PostModelViewSets(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     serializer_class = PostSerializer
-    queryset = Post.objects.filter(status = True)
-    filter_backends = [DjangoFilterBackend , SearchFilter,OrderingFilter]
-    filterset_fields = ['category', 'author' , 'status']       #more filter docs : https://django-filter.readthedocs.io/en/stable/index.html
-    search_fields = ['title', 'content']
-    ordering_fields = ['published_date']
+    queryset = Post.objects.filter(status=True)
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = [
+        "category",
+        "author",
+        "status",
+    ]  # more filter docs : https://django-filter.readthedocs.io/en/stable/index.html
+    search_fields = ["title", "content"]
+    ordering_fields = ["published_date"]
     pagination_class = DefaultPagination
 
-
-    @action(methods=["get"],detail=False)                         #detail = False , means no input required. if equal by True means input required
+    @action(
+        methods=["get"], detail=False
+    )  # detail = False , means no input required. if equal by True means input required
     def get_ok(self, request):
-        return Response({"detail":"ok"})
+        return Response({"detail": "ok"})
 
 
 class CategoryModelViewSets(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly]    
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
