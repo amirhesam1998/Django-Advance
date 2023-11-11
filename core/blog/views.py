@@ -12,10 +12,12 @@ from django.views.generic import (
     DeleteView,
 )
 from django.http import HttpResponse
-from .forms import PostForm
-from .models import Post
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+
+from .forms import PostForm
+from .models import Post
+
 
 # Create your views here.
 
