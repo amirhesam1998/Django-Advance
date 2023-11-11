@@ -39,7 +39,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("accounts/", include("django.contrib.auth.urls")),  # for LoginRequiredMixin
+    path("accounts/", include("accounts.urls")),
     path("blog/", include("blog.url")),
     path(
         "api-auth/", include("rest_framework.urls")
