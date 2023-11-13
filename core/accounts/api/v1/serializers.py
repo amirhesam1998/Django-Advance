@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from ...models import Profile
 class RegistrationSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(max_length = 255)
     class Meta:
@@ -91,3 +92,10 @@ class ChangePasswordSerializer(serializers.Serializer):
         
         return super().validate(attrs)
     
+
+class ProfileSerializer(serializers.ModelSerializer):
+    email = serializers.CharField(source ='user.email' , read_only = True)
+    class Meta:
+        model = Profile
+        fields = ('id','first_name','last_name','image','description','email')
+        read_only_fields = ['email']
