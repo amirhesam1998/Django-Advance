@@ -12,6 +12,14 @@ urlpatterns = [
     #registrations
 
     path("registration/",views.RegistrationApiView.as_view(),name = "registration"),
+    
+    #test
+    path('test-email/', views.TestEmailSend.as_view() , name='email-send'),
+    #activision
+    #path("activision/confirm"),
+
+    #resend activision
+    #path("activision/resend"),
 
     #login token
 
