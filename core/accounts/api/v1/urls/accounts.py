@@ -15,11 +15,11 @@ urlpatterns = [
     
     #test
     path('test-email/', views.TestEmailSend.as_view() , name='email-send'),
-    #activision
-    #path("activision/confirm"),
+    #activation
+    path("activation/confirm/<str:token>/" , views.ActivationApiView.as_view() , name='activation'),
 
-    #resend activision
-    #path("activision/resend"),
+    #resend activation
+    #path("activation/resend"),
 
     #login token
 
