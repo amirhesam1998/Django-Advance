@@ -11,8 +11,9 @@ from django.contrib.auth import get_user_model
 from ...models import Profile
 from django.shortcuts import get_object_or_404
 #from django.core.mail import send_mail
-from mail_templated import send_mail
-
+#from mail_templated import send_mail
+from mail_templated import EmailMessage
+from ..utils import EmailThread
 
 User = get_user_model()
 class RegistrationApiView(generics.GenericAPIView):
@@ -89,5 +90,8 @@ class ProfileApiView(generics.RetrieveUpdateAPIView):
 class TestEmailSend(generics.GenericAPIView):
 
     def post(self,request,*args,**kwargs):
-        send_mail('email/hello.tpl', {'name': 'name'}, 'admin@admin.com', ['amirhesamshokri@gmail.com'])
+        email_obj = EmailMessage('email/hello.tpl', {'name': 'name'}, 'admin@admin.com', to=['amirhesamshokri@gmail.com'])
+        # TODO: Add more useful commands here.
+        EmailThread(email_obj).start()
+        #send_mail('email/hello.tpl', {'name': 'name'}, 'admin@admin.com', ['amirhesamshokri@gmail.com'])
         return Response('email test')
