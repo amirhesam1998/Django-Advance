@@ -9,6 +9,9 @@ drf-yasg[validation]
 markdown
 django-filter
 
+#email third party module
+django-mail-templated
+
 
 #refactoring and tests
 black
