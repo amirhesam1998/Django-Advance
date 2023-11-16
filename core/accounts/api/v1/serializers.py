@@ -8,6 +8,8 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from ...models import Profile
+from django.shortcuts import get_object_or_404
+
 class RegistrationSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(max_length = 255)
     class Meta:
@@ -103,3 +105,19 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ('id','first_name','last_name','image','description','email')
         read_only_fields = ['email']
+    
+class ActivationResendSerializer(serializers.Serializer):
+
+    email = serializers.EmailField(required = True)
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        try:
+            user_obj=User.objects.get(email=email)
+        except not email:
+            raise serializers.ValidationError({'detail':'user does not exist'})
+        if user_obj.is_verified:
+            raise serializers.ValidationError({'detail':'user is already verified'})
+        attrs['user'] = user_obj
+
+        return super().validate(attrs)
