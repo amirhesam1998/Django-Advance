@@ -8,6 +8,7 @@ djangorestframework
 drf-yasg[validation]
 markdown
 django-filter
+djoser
 
 #email third party module
 django-mail-templated

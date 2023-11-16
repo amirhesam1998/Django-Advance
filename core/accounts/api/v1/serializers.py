@@ -121,3 +121,4 @@ class ActivationResendSerializer(serializers.Serializer):
         attrs['user'] = user_obj
 
         return super().validate(attrs)
+    
