@@ -1,4 +1,4 @@
-from django.test import TestCase , SimpleTestCase
+from django.test import TestCase , SimpleTestCase     #Testcase for work in database
 from django.urls import reverse , resolve
 from ..views import Indexview , PostDetailView , PostlistView
 # Create your tests here.
