@@ -1,0 +1,28 @@
+#general module
+django >4.2 ,<4.3
+python-decouple
+pillow
+djangorestframework
+
+#third party module
+drf-yasg[validation]
+markdown
+django-filter
+djoser
+django-cors-headers
+
+#email third party module
+django-mail-templated
+
+
+#refactoring and tests
+black
+flake8
+pytest
+pytest-django
+faker
+locust
+
+#background proccess and cache
+celery
+redis

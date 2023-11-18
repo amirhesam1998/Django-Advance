@@ -6,14 +6,15 @@ services:
     container_name: redis
     image: redis
     ports:
-      - "6379:6379"
-    command: redis-server --save 60 1 --loglevel warning
+      - "6379:6379"   
+    command: redis-server --save 60 1 --loglevel warning 
+
 
 
   backend:           #name services
     build: .         #build setup 
     container_name: backend 
-    command: python manage.py runserver 0.0.0.0:8000         #run command
+    command: python manage.py runserver 0.0.0.0:8000       #run command
     volumes:            #Put the changes of folder 'core' in the 'app' file ((link them))
       - ./core:/app
     ports:
@@ -21,6 +22,7 @@ services:
     environment:
       - SECRET_KEY=test             
       - DEBUG=True
+
   
   smtp4dev:
     image: rnwood/smtp4dev:v3
@@ -46,12 +48,13 @@ services:
     volumes:
       - ./core/locust:/mnt/locust
     command: -f /mnt/locust/locustfile.py --master -H http://backend:8000
-  
+
   worker:
     image: locustio/locust
     volumes:
       - ./core/locust:/mnt/locust
     command: -f /mnt/locust/locustfile.py --worker --master-host master
+
 
 
 volumes:
