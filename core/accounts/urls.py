@@ -1,5 +1,5 @@
 from django.urls import path, include
-
+from .views import send_email
 
 app_name = "accounts"
 
