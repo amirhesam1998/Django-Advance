@@ -7,6 +7,7 @@ from .views import (
     PostCreateView,
     PostEditView,
     PostDeleteView,
+    PostlistApiView
 )
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
@@ -36,6 +37,7 @@ urlpatterns = [
         name="redirect-to-maktabkhone",
     ),
     path("post/", PostlistView.as_view(), name="post-list"),  # (/) important
+    path("post/api", PostlistApiView.as_view(), name="post-list-api"),
     path("post/<int:pk>/", PostDetailView.as_view(), name="post-detail"),
     path("post/create/", PostCreateView.as_view(), name="post-create"),
     path("post/<int:pk>/edit/", PostEditView.as_view(), name="post-edit"),

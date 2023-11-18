@@ -5,6 +5,7 @@ from accounts.models import User , Profile
 from blog.models import Post,Category
 import random
 from datetime import datetime
+
 category_list = [
     'it',
     'math',

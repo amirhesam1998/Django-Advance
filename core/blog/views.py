@@ -89,6 +89,10 @@ class PostlistView(PermissionRequiredMixin, LoginRequiredMixin, ListView):
 
 class PostDetailView(LoginRequiredMixin, DetailView):
     model = Post
+    
+    
+class PostlistApiView(TemplateView):
+    template_name = 'blog/post_list_api.html'
 
 
 """
@@ -131,3 +135,5 @@ class PostEditView(LoginRequiredMixin, UpdateView):
 class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
     success_url = "/blog/post/"
+
+
