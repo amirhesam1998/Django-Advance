@@ -22,3 +22,7 @@ pytest
 pytest-django
 faker
 locust
+
+#background proccess and cache
+celery
+redis
