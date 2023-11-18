@@ -25,4 +25,5 @@ locust
 
 #background proccess and cache
 # celery
-# redis
+redis
+django-redis
