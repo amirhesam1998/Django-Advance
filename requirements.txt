@@ -24,6 +24,9 @@ faker
 locust
 
 #background proccess and cache
-# celery
+celery
 redis
 django-redis
+
+#deployment
+gunicorn
