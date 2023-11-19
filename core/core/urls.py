@@ -22,6 +22,11 @@ from django.urls import re_path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from django.http import HttpResponse
+
+
+def IndexView(request):
+    return HttpResponse('ok')
 
 
 schema_view = get_schema_view(
@@ -38,6 +43,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path("" , IndexView , name='index'),
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
     path("blog/", include("blog.url")),
