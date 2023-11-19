@@ -1,45 +1,46 @@
-version: '3.9'
+version: "3.9"
 
 services:
-
   redis:
     container_name: redis
     image: redis
-    restart: always    
+    restart: always
     ports:
-     - "6379:6379"   
-    command: redis-server --save 60 1 --loglevel warning 
+    - "6379:6379"
+    command: redis-server --save 60 1 --loglevel warning
 
-
-  backend:           #name services
-    build: .         #build setup 
-    container_name: backend 
-    command: gunicorn core.wsgi --bind 0.0.0.0:8000      #run command
-    volumes:            #Put the changes of folder 'core' in the 'app' file ((link them))
+  backend:
+    build: .
+    container_name: backend
+    command: gunicorn core.wsgi --bind 0.0.0.0:8000
+    volumes:
       - ./core:/app
+      - static_volume:/app/static
+      - media_volume:/app/media
+
     expose:
       - "8000"
     environment:
-      - SECRET_KEY=test             
+      - SECRET_KEY=test
       - DEBUG=False
     depends_on:
       - redis
-
+  
   nginx:
     image: nginx
     container_name: nginx
-    ports:
+    restart: always
+    ports: 
       - "80:80"
     volumes:
       - ./default.conf:/etc/nginx/conf.d/default.conf
+      - static_volume:/home/app/static
+      - media_volume:/home/app/media
     depends_on:
       - redis
       - backend
-    
 
-  worker:
-    build: .
-    command: celery -A core worker -loglevel=info
-    depends_on:
-      - redis
-      - backend
+
+volumes:
+  static_volume:
+  media_volume:
