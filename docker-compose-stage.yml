@@ -14,16 +14,28 @@ services:
   backend:           #name services
     build: .         #build setup 
     container_name: backend 
-    command: python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn core.wsgi --bind 0.0.0.0:8000      #run command
+    command: gunicorn core.wsgi --bind 0.0.0.0:8000      #run command
     volumes:            #Put the changes of folder 'core' in the 'app' file ((link them))
       - ./core:/app
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     environment:
       - SECRET_KEY=test             
       - DEBUG=False
     depends_on:
       - redis
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - redis
+      - backend
+    
 
   worker:
     build: .
